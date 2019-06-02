@@ -1,7 +1,8 @@
 package com.market.solutions_electronics;
 
-import android.support.annotation.NonNull;
-import android.support.v4.view.MenuItemCompat;
+import android.content.Intent;
+
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,95 +11,97 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    Button get;
+    ImageView product;
      TextView text1;
-     FirebaseDatabase fire;
-     DatabaseReference data;
-     SliderLayout sliderShow;
+
+    FirebaseFirestore db;
+    // SliderLayout sliderShow;
+    private SliderLayout mDemoSlider;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//       fire =FirebaseDatabase.getInstance();
+
         setContentView(R.layout.activity_main);
-        //get=findViewById(R.id.get);
-        //text1=findViewById(R.id.text1);
-//        get.setOnClickListener(this);
-
-       // data=fire.getReferenceFromUrl("https://solutions-electronics.firebaseio.com/");
-        inflateImageSlider();
-
-    }
-
-    @Override
-    public void onClick(View view) {
-/*
-        if(view.getId() == R.id.get){
-            final DatabaseReference myRef = data.child("dd");
-            myRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String value = dataSnapshot.getValue(String.class);
-                    if(value==null){
-                        text1.setText("Error Not Found");
-                    }
-                    else{
-
-                        text1.setText(value);
-                    }
-
-
-                    data.child("dd").setValue("abc");
-                    //DatabaseReference myRef2 = data.child("abeer").push();
-                   // myRef2.setValue("def","name");
-
-                }
-
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-        }
-*/
-    }
-    private void inflateImageSlider() {
-
-        // Using Image Slider -----------------------------------------------------------------------
-        sliderShow = findViewById(R.id.slider);
-
-        //populating Image slider
+        db = FirebaseFirestore.getInstance();
+        product=findViewById(R.id.products);
+        product.setOnClickListener(this);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPage);
+        ImageAdapter adapterView = new ImageAdapter(this);
+        mViewPager.setAdapter(adapterView);
+        //inflateImageSlider();
+/*        sliderShow = findViewById(R.id.slider);
         ArrayList<String> sliderImages = new ArrayList<>();
-        sliderImages.add("http://www.amityelectronics.in/images/banner4.jpg");
-        sliderImages.add("https://cmassets.akamaized.net/global/upload/home/2-mc500p.png");
-        sliderImages.add("https://gloimg.gbtcdn.com/soa/gb/pdm-product-pic/Electronic/2018/07/05/source-img/20180705190154_31078.jpg");
-        sliderImages.add("https://cf2.s3.souqcdn.com/item/2016/10/31/11/78/34/36/item_XL_11783436_17185976.jpg");
-
+        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
         for (String s : sliderImages) {
             DefaultSliderView sliderView = new DefaultSliderView(this);
             sliderView.image(s);
             sliderShow.addSlider(sliderView);
         }
+        */
 
-        sliderShow.setPresetIndicator(SliderLayout.PresetIndicators.Right_Bottom);
 
     }
+
     @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.products) {
+
+            Intent intent = new Intent(MainActivity.this, products.class);
+            startActivity(intent);
+        }
+
+
+
+    }
+    private void inflateImageSlider() {
+
+        // Using Image Slider -----------------------------------------------------------------------
+        //sliderShow = findViewById(R.id.slider);
+
+        //populating Image slider
+        ArrayList<String> sliderImages = new ArrayList<>();
+        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+        //sliderImages.add("https://firebasestorage.googleapis.com/v0/b/solutions-electronics.appspot.com/o/image3.png?alt=media&token=78d17307-eee7-4f7b-bce9-b3d133dc3b8b");
+        //sliderImages.add("https://firebasestorage.googleapis.com/v0/b/solutions-electronics.appspot.com/o/image4.png?alt=media&token=89d4605b-75b4-4d73-8bcd-8c94c14b270a");
+        //sliderImages.add("https://firebasestorage.googleapis.com/v0/b/solutions-electronics.appspot.com/o/image5.png?alt=media&token=26fb43a9-1a0d-431a-81c1-9a9c8480e812");
+       /*
+        DefaultSliderView sliderView = new DefaultSliderView(this);
+        sliderView.image("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+        sliderShow.addSlider(sliderView);*/
+
+        for (String s : sliderImages) {
+            DefaultSliderView sliderView = new DefaultSliderView(this);
+            sliderView.image(s);
+           // sliderShow.addSlider(sliderView);
+        }
+
+
+
+
+        //sliderShow.setPresetIndicator(SliderLayout.PresetIndicators.Right_Bottom);
+
+
+    }
+
+        @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
 

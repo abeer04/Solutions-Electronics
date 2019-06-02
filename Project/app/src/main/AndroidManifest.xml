@@ -3,6 +3,7 @@
     package="com.market.solutions_electronics">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".profile"></activity>
+        <activity
+            android:name=".productdetail"
+            android:label="@string/title_activity_productdetail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".profile" />
         <activity android:name=".cart" />
         <activity android:name=".contactus" />
         <activity android:name=".wallet" />

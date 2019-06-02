@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
-
     <item
         android:id="@+id/notif"
         android:icon="@drawable/notification"
-        app:showAsAction="always|collapseActionView"
-        android:title="Grid"/>
-    <item
-        android:id="@+id/view_profile"
-        android:icon="@drawable/profile"
+
         app:showAsAction="always|collapseActionView"
         android:title="Grid"/>
     <item
@@ -19,6 +12,5 @@
         android:icon="@drawable/cart"
         app:showAsAction="always|collapseActionView"
         android:title="Grid"/>
-
 
 </menu>
