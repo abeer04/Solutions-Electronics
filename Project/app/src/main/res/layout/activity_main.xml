@@ -51,7 +51,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="10">
+            >
 
             <android.support.v7.widget.CardView
 
@@ -66,11 +66,12 @@
                     <ImageView
                         android:id="@+id/myorder"
                         style="@style/homegridimage"
+                        android:background="@drawable/ripple"
                         android:src="@drawable/visitingcard" />
 
                     <TextView
                         android:layout_below="@id/myorder"
-                        android:text="My-Order"
+                        android:text="My Orders"
                         style="@style/homegridtext"/>
 
                 </RelativeLayout>
@@ -89,7 +90,8 @@
                     <ImageView
                         android:id="@+id/products"
                         style="@style/homegridimage"
-                        android:src="@drawable/tshirt" />
+                        android:src="@drawable/products"
+                        android:background="@drawable/ripple"/>
 
                     <TextView
                         android:layout_below="@id/products"
@@ -106,7 +108,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="10">
+            >
 
             <android.support.v7.widget.CardView
                 style="@style/homegridcard"
@@ -119,7 +121,8 @@
 
                     <ImageView
                         android:id="@+id/wallet"
-                        android:src="@drawable/bags"
+                        android:background="@drawable/ripple"
+                        android:src="@drawable/wallet"
                         style="@style/homegridimage" />
 
                     <TextView
@@ -143,6 +146,7 @@
                     <ImageView
                         android:id="@+id/contact"
                         style="@style/homegridimage"
+                        android:background="@drawable/ripple"
                         android:src="@drawable/pens" />
 
                     <TextView
