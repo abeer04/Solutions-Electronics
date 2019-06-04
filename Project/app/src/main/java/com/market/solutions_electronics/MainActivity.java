@@ -2,6 +2,7 @@ package com.market.solutions_electronics;
 
 import android.content.Intent;
 
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,14 +22,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ImageView product;
-     TextView text1;
+
 
     FirebaseFirestore db;
-    // SliderLayout sliderShow;
-    private SliderLayout mDemoSlider;
+
+
+    int currentPage = 0;
+    Timer timer;
+    final long DELAY_MS = 5000;//delay in milliseconds before task is to be executed
+    final long PERIOD_MS = 3000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,22 +44,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         db = FirebaseFirestore.getInstance();
         product=findViewById(R.id.products);
         product.setOnClickListener(this);
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPage);
+        final ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPage);
         ImageAdapter adapterView = new ImageAdapter(this);
         mViewPager.setAdapter(adapterView);
-        //inflateImageSlider();
-/*        sliderShow = findViewById(R.id.slider);
-        ArrayList<String> sliderImages = new ArrayList<>();
-        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
-        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
-        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
-        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
-        for (String s : sliderImages) {
-            DefaultSliderView sliderView = new DefaultSliderView(this);
-            sliderView.image(s);
-            sliderShow.addSlider(sliderView);
-        }
-        */
+
+        final Handler handler = new Handler();
+        final Runnable Update = new Runnable() {
+            public void run() {
+                if (currentPage == 6-1) {
+                    currentPage = 0;
+                }
+                mViewPager.setCurrentItem(currentPage++, true);
+            }
+        };
+
+        timer = new Timer(); // This will create a new Thread
+        timer.schedule(new TimerTask() { // task to be scheduled
+            @Override
+            public void run() {
+                handler.post(Update);
+            }
+        }, DELAY_MS, PERIOD_MS);
 
 
     }
@@ -68,38 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-    private void inflateImageSlider() {
-
-        // Using Image Slider -----------------------------------------------------------------------
-        //sliderShow = findViewById(R.id.slider);
-
-        //populating Image slider
-        ArrayList<String> sliderImages = new ArrayList<>();
-        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
-        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
-        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
-        sliderImages.add("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
-        //sliderImages.add("https://firebasestorage.googleapis.com/v0/b/solutions-electronics.appspot.com/o/image3.png?alt=media&token=78d17307-eee7-4f7b-bce9-b3d133dc3b8b");
-        //sliderImages.add("https://firebasestorage.googleapis.com/v0/b/solutions-electronics.appspot.com/o/image4.png?alt=media&token=89d4605b-75b4-4d73-8bcd-8c94c14b270a");
-        //sliderImages.add("https://firebasestorage.googleapis.com/v0/b/solutions-electronics.appspot.com/o/image5.png?alt=media&token=26fb43a9-1a0d-431a-81c1-9a9c8480e812");
-       /*
-        DefaultSliderView sliderView = new DefaultSliderView(this);
-        sliderView.image("https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
-        sliderShow.addSlider(sliderView);*/
-
-        for (String s : sliderImages) {
-            DefaultSliderView sliderView = new DefaultSliderView(this);
-            sliderView.image(s);
-           // sliderShow.addSlider(sliderView);
-        }
-
-
-
-
-        //sliderShow.setPresetIndicator(SliderLayout.PresetIndicators.Right_Bottom);
-
-
-    }
 
         @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,6 +90,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return true;
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.cart) {
+            Intent intent = new Intent(MainActivity.this, cart.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

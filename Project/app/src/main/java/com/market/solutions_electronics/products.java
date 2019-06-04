@@ -1,5 +1,6 @@
 package com.market.solutions_electronics;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -90,6 +91,8 @@ public class products extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.cart) {
+            Intent intent = new Intent(products.this, cart.class);
+            startActivity(intent);
             return true;
         }
 

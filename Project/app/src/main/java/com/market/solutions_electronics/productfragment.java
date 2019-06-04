@@ -79,6 +79,7 @@ public class productfragment extends Fragment {
 
 
                             }
+
                         } else {
                             Log.d("789", "Error getting documents: ", task.getException());
                         }

@@ -19,8 +19,8 @@ import java.util.List;
 
 public  class productadapter extends RecyclerView.Adapter<productadapter.ViewHolder> {
 
-    Context context;
-    ArrayList<productinfo> productinfos;
+
+
     List<String> des;
     List<String> nam;
     List<String> price;
@@ -56,7 +56,7 @@ public  class productadapter extends RecyclerView.Adapter<productadapter.ViewHol
         final String uri=url.get(position);
 
         viewHolder.name.setText(names);
-        viewHolder.price.setText(pric);
+        viewHolder.price.setText("Price:"+pric+"Rs");
         Glide.with(viewHolder.pimage.getContext()).load(uri).
                 into(viewHolder.pimage);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
