@@ -27,6 +27,9 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ImageView product;
+    ImageView myorders;
+    ImageView contact;
+    ImageView wallet;
 
 
     FirebaseFirestore db;
@@ -43,7 +46,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         db = FirebaseFirestore.getInstance();
         product=findViewById(R.id.products);
+        myorders=findViewById(R.id.myorder);
+        contact=findViewById(R.id.contact);
+        wallet=findViewById(R.id.wallet);
+
         product.setOnClickListener(this);
+        myorders.setOnClickListener(this);
+        contact.setOnClickListener(this);
+        wallet.setOnClickListener(this);
+
         final ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPage);
         ImageAdapter adapterView = new ImageAdapter(this);
         mViewPager.setAdapter(adapterView);
@@ -71,12 +82,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.products) {
+
+        if(view == product) {
 
             Intent intent = new Intent(MainActivity.this, products.class);
             startActivity(intent);
         }
 
+        else if(view == myorders) {
+
+            Intent intent = new Intent(MainActivity.this, myorder.class);
+            startActivity(intent);
+        }
+
+        else if(view == contact) {
+
+            Intent intent = new Intent(MainActivity.this, contactus.class);
+            startActivity(intent);
+        }
+        else if(view == wallet) {
+
+            Intent intent = new Intent(MainActivity.this, wallet.class);
+            startActivity(intent);
+        }
 
 
     }
