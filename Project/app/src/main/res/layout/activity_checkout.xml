@@ -5,26 +5,12 @@
     android:layout_height="match_parent"
     xmlns:fancy="http://schemas.android.com/tools">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/toolbarwrap"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:titleTextColor="#000"
-            style="@style/CustomTheme"
-            android:background="@color/colorAccent"/>
-
-
-    </android.support.design.widget.AppBarLayout>
 
 
 
     <ScrollView
-        android:layout_below="@id/toolbarwrap"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical">
@@ -119,9 +105,31 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                style="@style/headingfonts"
+                android:text="Payment Mode :"
+                android:textColor="#424242"/>
 
-
-
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RadioButton android:id="@+id/wallet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wallet"
+                    />
+                <RadioButton android:id="@+id/cash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cash"
+                    />
+            </RadioGroup>
 
 
             <View
@@ -175,6 +183,7 @@
 
 
             <ImageView
+                android:id="@+id/ordernow"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 style="@style/AppTheme.RoundedCornerMaterialButton"
