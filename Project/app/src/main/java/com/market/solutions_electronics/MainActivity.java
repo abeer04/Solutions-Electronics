@@ -6,22 +6,11 @@ import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SearchView;
-import android.widget.TextView;
-
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,7 +19,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageView myorders;
     ImageView contact;
     ImageView wallet;
-
 
     FirebaseFirestore db;
 

@@ -62,7 +62,6 @@ public class bottom extends AppCompatActivity {
             //FragmentTransaction ft=fragmentManager.beginTransaction();
             fragmentManager.beginTransaction().replace(R.id.flContent2, fragment).commit();
 
-
         }
 
     }

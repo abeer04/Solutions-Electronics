@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <item
+        android:id="@+id/inProcess"
+        android:icon="@drawable/inprocess"
+        android:title="In Process" />
+
+    <item
+        android:id="@+id/complete"
+        android:icon="@drawable/completed"
+        android:title="Completed" />
+
+
+</menu>

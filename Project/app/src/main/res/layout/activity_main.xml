@@ -29,7 +29,7 @@
 
     </LinearLayout>
     <LinearLayout
-        android:layout_weight="6"
+        android:layout_weight="5.5"
         android:layout_width="match_parent"
         android:layout_height="0dp">
         <android.support.v4.view.ViewPager
@@ -41,13 +41,12 @@
             app:pager_animation_span="1100" />
     </LinearLayout>
     <LinearLayout
-        android:layout_weight="4.0"
+        android:layout_weight="4.5"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
         <LinearLayout
-
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -162,7 +161,7 @@
 
     </LinearLayout>
     <LinearLayout
-        android:layout_weight="1.0"
+        android:layout_weight="2"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
