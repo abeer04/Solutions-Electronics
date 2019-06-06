@@ -1,5 +1,6 @@
 package com.market.solutions_electronics;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,7 +42,7 @@ int titems;
         totalamount=findViewById(R.id.total_amount);
         date=findViewById(R.id.delivery_date);
         cash=findViewById(R.id.cash);
-        cash.isChecked();
+        cash.setChecked(true);
         wallet=findViewById(R.id.wallet);
         ordername=findViewById(R.id.ordername);
         ordernumber=findViewById(R.id.ordernumber);
@@ -51,37 +52,62 @@ int titems;
         ordernow.setOnClickListener(this);
         session = new Session(checkout.this);
         String doc =session.getemail();
+        Intent intent = getIntent();
+        String key = intent.getStringExtra("key");
+        if(key.equals("multi")){
 
-        db.collection("User").document(doc).collection("MyCart")
-                .get(Source.SERVER)
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+            db.collection("User").document(doc).collection("MyCart")
+                    .get(Source.SERVER)
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                //productinfo data1=document.getData();
-                                titems++;
-                                String gprice=document.getString("Price");
-                                int gp=Integer.parseInt(document.getString("Price"));
-                                tamout=tamout+gp;
-                               // Log.d("847", String.valueOf(titems));
-                                noitems.setText(String.valueOf(titems));
-                                totalamount.setText(String.valueOf(tamout));
+                                    //productinfo data1=document.getData();
+                                    titems++;
+                                    String gprice=document.getString("Price");
+                                    int gp=Integer.parseInt(document.getString("Price"));
+                                    tamout=tamout+gp;
+                                    // Log.d("847", String.valueOf(titems));
+                                    noitems.setText(String.valueOf(titems));
+                                    totalamount.setText(String.valueOf(tamout));
 
-                                if(titems<10){
-                                    date.setText("3 days");
+                                    if(titems<10){
+                                        date.setText("3 days");
+                                    }
+                                    else{
+                                        date.setText("7 days");
+                                    }
                                 }
-                                else{
-                                    date.setText("7 days");
-                                }
+
+                            } else {
+                                Log.d("789", "Error getting documents: ", task.getException());
                             }
-
-                        } else {
-                            Log.d("789", "Error getting documents: ", task.getException());
                         }
-                    }
-                });
+                    });
+
+
+        }
+        else{
+
+            String name = intent.getStringExtra("name");
+            String price= intent.getStringExtra("price");
+            String qty= intent.getStringExtra("qty");
+
+            int gp=Integer.parseInt(price);
+            int qty22 =Integer.parseInt(qty);
+            gp=gp*qty22;
+            noitems.setText(qty);
+            totalamount.setText(String.valueOf(gp));
+
+                date.setText("3 days");
+
+
+
+        }
+
+
 
 
 

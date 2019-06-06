@@ -88,6 +88,12 @@ public class productdetail extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         if(view.getId() == R.id.buy_now) {
             Intent intent = new Intent(productdetail.this, checkout.class);
+            intent.putExtra("key","single");
+            intent.putExtra("name",gname);
+            intent.putExtra("price",gprice);
+            intent.putExtra("qty",quantity.getText().toString());
+
+
             startActivity(intent);
 
         }

@@ -108,37 +108,21 @@ public class cartfragment extends Fragment implements View.OnClickListener {
                         }
                     }
                 });
-        /*
-        name.add("abc");
-        qty2.add("12");
-        pric.add("aacc");
-        url2.add("https://firebasestorage.googleapis.com/v0/b/solutions-electronics.appspot.com/o/image1.png?alt=media&token=f258a39f-88af-4be0-ad9e-cb7756179b96");
-        /*
-        name.add(name22);
-        qty2.add(qty33);
-        pric.add(price22);
-        url2.add(url44);
-*/
+
 
 
         return view;
     }
 
 
-    public void clearall() {
 
-
-        name.clear();
-        qty2.clear();
-        pric.clear();
-        url2.clear();
-    }
 
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.checkout) {
             Intent intent = new Intent(getActivity(), checkout.class);
+            intent.putExtra("key","multi");
             startActivity(intent);
 
         }
