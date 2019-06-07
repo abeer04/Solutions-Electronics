@@ -36,7 +36,7 @@ public class myorder extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myorder);
-
+        getSupportActionBar().setTitle("My Orders");
 
         BottomNavigationView navView = findViewById(R.id.orders_nav);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

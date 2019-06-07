@@ -30,6 +30,8 @@
     <string name="number2"><u>+923228493494</u></string>
     <string name="mail"><u>20-10596@formanite.fccollege.edu.pk</u></string>
     <string name="mail2"><u>20-@formanite.fccollege.edu.pk</u></string>
+    <string name="title_activity_map">Map</string>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>

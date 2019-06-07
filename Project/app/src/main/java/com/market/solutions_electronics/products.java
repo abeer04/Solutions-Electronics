@@ -95,6 +95,13 @@ public class products extends AppCompatActivity
             startActivity(intent);
             return true;
         }
+        else if (id == R.id.view_profile)
+        {
+            Intent intent = new Intent(products.this, profile.class);
+            startActivity(intent);
+            return true;
+
+        }
 
         return super.onOptionsItemSelected(item);
     }

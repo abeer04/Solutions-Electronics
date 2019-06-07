@@ -81,12 +81,6 @@ int i=0;
 
                                     }
 
-
-
-
-
-
-
                                 }
                                 if(i>0){
                                     Toast.makeText(getActivity(), "InValid Username or Password",
