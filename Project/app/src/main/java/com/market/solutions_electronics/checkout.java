@@ -19,10 +19,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.lang.Integer.parseInt;
 
 public class checkout extends AppCompatActivity implements View.OnClickListener {
 TextView noitems,totalamount,date;
@@ -32,6 +37,9 @@ ImageView ordernow;
 FirebaseFirestore db;
 int tamout;
 int titems;
+    int gp;
+    String key;
+    String name,price,qty,url2;
     private Session session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +61,7 @@ int titems;
         session = new Session(checkout.this);
         String doc =session.getemail();
         Intent intent = getIntent();
-        String key = intent.getStringExtra("key");
+        key = intent.getStringExtra("key");
         if(key.equals("multi")){
 
             db.collection("User").document(doc).collection("MyCart")
@@ -91,17 +99,17 @@ int titems;
         }
         else{
 
-            String name = intent.getStringExtra("name");
-            String price= intent.getStringExtra("price");
-            String qty= intent.getStringExtra("qty");
+            name = intent.getStringExtra("name");
+             price= intent.getStringExtra("price");
+             qty= intent.getStringExtra("qty");
+             url2 = intent.getStringExtra("url");
 
-            int gp=Integer.parseInt(price);
+             gp=Integer.parseInt(price);
             int qty22 =Integer.parseInt(qty);
             gp=gp*qty22;
             noitems.setText(qty);
             totalamount.setText(String.valueOf(gp));
-
-                date.setText("3 days");
+            date.setText("3 days");
 
 
 
@@ -120,71 +128,468 @@ int titems;
 
     @Override
     public void onClick(View view) {
-
+        session = new Session(checkout.this);
+        final String doc =session.getemail();
         if(view == ordernow) {
-            session = new Session(checkout.this);
-            String doc =session.getemail();
+            final Date currentTime = Calendar.getInstance().getTime();
+            if(key.equals("multi")) {
+                if(wallet.isChecked()){
+                    db.collection("User")
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Log.d("999", document.getId() + " => " + document.getData());
+                                            //productinfo data1=document.getData();
 
-            db.collection("User").document(doc).collection("MyCart")
-                    .get(Source.SERVER)
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d("999", document.getId() + " => " + document.getData());
-                                    //productinfo data1=document.getData();
+
+                                            if(document.getId().equals(doc)){
+                                                Log.d("741",String.valueOf(gp));
+                                                // String walletn=document.getString("wallet");
+                                                int wl=parseInt((document.getData()).get("wallet").toString());
+                                                if(wl>tamout){
+                                                    db.collection("User").document(doc).collection("MyCart")
+                                                            .get()
+                                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                            Log.d("999", document.getId() + " => " + document.getData());
+                                                                            //productinfo data1=document.getData();
 
 
-                                    Map<String, Object> userdata = new HashMap<>();
-                                    userdata.put("Name", document.getString("Name"));
-                                    userdata.put("Price", document.getString("Price"));
-                                    userdata.put("Qty", document.getString("Qty"));
-                                    userdata.put("URL", document.getString("Url"));
+                                                                            Map<String, Object> userdata = new HashMap<>();
+                                                                            userdata.put("Name", document.getString("Name"));
+                                                                            userdata.put("Price", document.getString("Price"));
+                                                                            userdata.put("Qty", document.getString("Qty"));
+                                                                            userdata.put("URL", document.getString("Url"));
 
-                                    String doc =session.getemail();
-                                    Log.d("777",doc);
 
-                                    db.collection("User").document(doc).collection("MyOrder").document()
-                                            .set(userdata)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    //Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                                            Log.d("777", doc);
+
+                                                                            db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection(currentTime.toString()).document()
+                                                                                    .set(userdata)
+                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                        @Override
+                                                                                        public void onSuccess(Void aVoid) {
+                                                                                            //Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                                                        }
+                                                                                    })
+                                                                                    .addOnFailureListener(new OnFailureListener() {
+                                                                                        @Override
+                                                                                        public void onFailure(@NonNull Exception e) {
+                                                                                            //Log.w(TAG, "Error writing document", e);
+                                                                                        }
+                                                                                    });
+
+
+
+
+                                                                        }
+
+                                                                        Map<String, Object> userinfo = new HashMap<>();
+                                                                        userinfo.put("CustomerName", ordername.getText().toString());
+                                                                        userinfo.put("Mobile", ordernumber.getText().toString());
+                                                                        userinfo.put("Address", orderadd.getText().toString());
+                                                                        userinfo.put("Status", "InProgress");
+
+                                                                        db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString())
+                                                                                .set(userinfo)
+                                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                    @Override
+                                                                                    public void onSuccess(Void aVoid) {
+                                                                                        //Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                                                    }
+                                                                                })
+                                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                                    @Override
+                                                                                    public void onFailure(@NonNull Exception e) {
+                                                                                        //Log.w(TAG, "Error writing document", e);
+                                                                                    }
+                                                                                });
+                                                                        Toast.makeText(checkout.this, "Order has been placed",
+                                                                                Toast.LENGTH_LONG).show();
+
+                                                                    } else {
+                                                                        Log.d("789", "Error getting documents: ", task.getException());
+                                                                    }
+                                                                }
+                                                            });
+
+                                                    int cc=wl-tamout;
+
+
+                                                    Map<String, Object> user_wallet = new HashMap<>();
+                                                    user_wallet.put("wallet", String.valueOf(cc));
+
+                                                    db.collection("User").document(session.getemail())
+                                                            .set(user_wallet, SetOptions.merge())
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    // show_amount.setText("error");
+                                                                }
+                                                            });
+
+                                                    db.collection("User").document(doc).collection("MyCart")
+                                                            .get()
+                                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                            Log.d("999", document.getId() + " => " + document.getData());
+                                                                            //productinfo data1=document.getData();
+                                                                            String docid=document.getId();
+
+                                                                            db.collection("User").document(doc).collection("MyCart").document(docid)
+                                                                                    .delete()
+                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                        @Override
+                                                                                        public void onSuccess(Void aVoid) {
+                                                                                            // Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                                                        }
+                                                                                    })
+                                                                                    .addOnFailureListener(new OnFailureListener() {
+                                                                                        @Override
+                                                                                        public void onFailure(@NonNull Exception e) {
+                                                                                            // Log.w(TAG, "Error deleting document", e);
+                                                                                        }
+                                                                                    });
+
+                                                                            //list.add(tt);
+
+                                                                            //list.add(document.getData());
+
+
+
+                                                                        }
+
+                                                                    } else {
+                                                                        Log.d("789", "Error getting documents: ", task.getException());
+                                                                    }
+                                                                }
+                                                            });
+                                                    Intent intent = new Intent(checkout.this, products.class);
+                                                    startActivity(intent);
+
+
+
+
                                                 }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    //Log.w(TAG, "Error writing document", e);
+                                                else{
+                                                    Toast.makeText(checkout.this, "Not Enough money in wallet",
+                                                            Toast.LENGTH_LONG).show();
                                                 }
-                                            });
 
+                                            }
 
-                                    Toast.makeText(checkout.this, "Done",
-                                            Toast.LENGTH_LONG).show();
+                                            //list.add(tt);
 
-
-
-
-
-                                    //list.add(tt);
-
-                                    //list.add(document.getData());
+                                            //list.add(document.getData());
 
 
 
+                                        }
+
+                                    } else {
+                                        Log.d("789", "Error getting documents: ", task.getException());
+                                    }
                                 }
+                            });
 
-                            } else {
-                                Log.d("789", "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
+            }
+                else{
+
+                    db.collection("User").document(doc).collection("MyCart")
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Log.d("999", document.getId() + " => " + document.getData());
+                                            //productinfo data1=document.getData();
+
+
+                                            Map<String, Object> userdata = new HashMap<>();
+                                            userdata.put("Name", document.getString("Name"));
+                                            userdata.put("Price", document.getString("Price"));
+                                            userdata.put("Qty", document.getString("Qty"));
+                                            userdata.put("URL", document.getString("Url"));
+
+
+                                            Log.d("777", doc);
+
+                                            db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection(currentTime.toString()).document()
+                                                    .set(userdata)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            //Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            //Log.w(TAG, "Error writing document", e);
+                                                        }
+                                                    });
+
+
+                                            //list.add(tt);
+
+                                            //list.add(document.getData());
+
+
+                                        }
+
+                                        Map<String, Object> userinfo = new HashMap<>();
+                                        userinfo.put("CustomerName", ordername.getText().toString());
+                                        userinfo.put("Mobile", ordernumber.getText().toString());
+                                        userinfo.put("Address", orderadd.getText().toString());
+                                        userinfo.put("Status", "InProgress");
+
+                                        db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString())
+                                                .set(userinfo)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        //Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        //Log.w(TAG, "Error writing document", e);
+                                                    }
+                                                });
+                                        Toast.makeText(checkout.this, "Order has been placed",
+                                                Toast.LENGTH_LONG).show();
+
+                                    } else {
+                                        Log.d("789", "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
+                    db.collection("User").document(doc).collection("MyCart")
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Log.d("999", document.getId() + " => " + document.getData());
+                                            //productinfo data1=document.getData();
+                                            String docid=document.getId();
+
+                                            db.collection("User").document(doc).collection("MyCart").document(docid)
+                                                    .delete()
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            // Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            // Log.w(TAG, "Error deleting document", e);
+                                                        }
+                                                    });
+
+                                            //list.add(tt);
+
+                                            //list.add(document.getData());
+                                            Intent intent = new Intent(checkout.this, products.class);
+                                            startActivity(intent);
+
+
+                                        }
+
+                                    } else {
+                                        Log.d("789", "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
+
+
+                }
+            }
+            else{
+                if(wallet.isChecked()){
+                    db.collection("User")
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Log.d("999", document.getId() + " => " + document.getData());
+                                            //productinfo data1=document.getData();
+
+
+                                            if(document.getId().equals(doc)){
+                                               // String walletn=document.getString("wallet");
+                                                int wl=parseInt((document.getData()).get("wallet").toString());
+                                                if(wl>gp){
+                                                    Map<String, Object> userdata = new HashMap<>();
+                                                    userdata.put("Name", name);
+                                                    userdata.put("Price", price);
+                                                    userdata.put("Qty", qty);
+                                                    userdata.put("URL", url2);
+
+                                                    db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection(currentTime.toString()).document()
+                                                            .set(userdata)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    //Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    //Log.w(TAG, "Error writing document", e);
+                                                                }
+                                                            });
+
+                                                    Map<String, Object> userinfo = new HashMap<>();
+                                                    userinfo.put("CustomerName", ordername.getText().toString());
+                                                    userinfo.put("Mobile", ordernumber.getText().toString());
+                                                    userinfo.put("Address", orderadd.getText().toString());
+
+                                                    db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString())
+                                                            .set(userinfo)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    //Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    //Log.w(TAG, "Error writing document", e);
+                                                                }
+                                                            });
+                                                    Toast.makeText(checkout.this, "Order has been placed",
+                                                            Toast.LENGTH_LONG).show();
+
+                                                    int cc=wl-gp;
+
+
+                                                    Map<String, Object> user_wallet = new HashMap<>();
+                                                    user_wallet.put("wallet", String.valueOf(cc));
+
+                                                    db.collection("User").document(session.getemail())
+                                                            .set(user_wallet, SetOptions.merge())
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                   // show_amount.setText("error");
+                                                                }
+                                                            });
+
+                                                    Intent intent = new Intent(checkout.this, products.class);
+                                                    startActivity(intent);
 
 
 
 
+                                                }
+                                                else{
+                                                    Toast.makeText(checkout.this, "Not Enough money in wallet",
+                                                            Toast.LENGTH_LONG).show();
+                                                }
+
+                                            }
+
+                                            //list.add(tt);
+
+                                            //list.add(document.getData());
+
+
+
+                                        }
+
+                                    } else {
+                                        Log.d("789", "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
+
+
+
+                }
+                else{
+
+                    Map<String, Object> userdata = new HashMap<>();
+                    userdata.put("Name", name);
+                    userdata.put("Price", price);
+                    userdata.put("Qty", qty);
+                    userdata.put("URL", url2);
+
+                    db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection(currentTime.toString()).document()
+                            .set(userdata)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    //Log.d(TAG, "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    //Log.w(TAG, "Error writing document", e);
+                                }
+                            });
+
+                    Map<String, Object> userinfo = new HashMap<>();
+                    userinfo.put("CustomerName", ordername.getText().toString());
+                    userinfo.put("Mobile", ordernumber.getText().toString());
+                    userinfo.put("Address", orderadd.getText().toString());
+
+                    db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString())
+                            .set(userinfo)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    //Log.d(TAG, "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    //Log.w(TAG, "Error writing document", e);
+                                }
+                            });
+                    Toast.makeText(checkout.this, "Order has been placed",
+                            Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(checkout.this, products.class);
+                    startActivity(intent);
+
+
+                }
+
+
+
+
+
+            }
 
 
         }

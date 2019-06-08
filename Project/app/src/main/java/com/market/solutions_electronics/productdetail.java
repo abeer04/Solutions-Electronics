@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -92,6 +93,7 @@ public class productdetail extends AppCompatActivity implements View.OnClickList
             intent.putExtra("name",gname);
             intent.putExtra("price",gprice);
             intent.putExtra("qty",quantity.getText().toString());
+            intent.putExtra("url",gurl);
 
 
             startActivity(intent);
@@ -196,18 +198,34 @@ public class productdetail extends AppCompatActivity implements View.OnClickList
         getMenuInflater().inflate(R.menu.products, menu);
         return true;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_share) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+
+            String name2=name.getText().toString();
+            String qty2=quantity.getText().toString();
+            String pri2=price.getText().toString();
+            String conc=name2+"\n"+qty2+"\n"+pri2;
+            //sendIntent.putExtra(Intent.EXTRA_TEXT, name.getText().toString());
+            //sendIntent.putExtra(Intent.EXTRA_TEXT, quantity.getText().toString());
+            sendIntent.putExtra(Intent.EXTRA_TEXT, conc);
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
-    public ArrayList<String> getname() {
-        return name22;
-    }
-    public ArrayList<String> getQty() {
-        return qty22;
-    }
-    public ArrayList<String> getPric() {
-        return pric22;
-    }
-    public ArrayList<String> getUrl() {
-        return url22;
-    }
+
 }

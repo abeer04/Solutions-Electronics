@@ -7,6 +7,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
@@ -36,6 +39,8 @@ public class products extends AppCompatActivity
     ArrayList<String> pric = new ArrayList<>();
     ArrayList<String> url2 = new ArrayList<>();
     productfragment productfragment = new productfragment();
+
+    int bool=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,10 +100,22 @@ public class products extends AppCompatActivity
             startActivity(intent);
             return true;
         }
-        else if (id == R.id.view_profile)
+        else if (id == R.id.grid)
+
         {
-            Intent intent = new Intent(products.this, profile.class);
-            startActivity(intent);
+            final RecyclerView userList=findViewById(R.id.productlist);
+
+            if(bool==0) {
+                userList.setLayoutManager(new GridLayoutManager(this, 2));
+                bool=1;
+            }
+            else{
+                userList.setLayoutManager(new LinearLayoutManager(this));
+                bool=0;
+            }
+
+           // userList.setLayoutManager(new GridLayoutManager(products.this, 2));
+
             return true;
 
         }
