@@ -48,10 +48,8 @@ public class productfragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_productfragment, container, false);
         //return inflater.inflate(R.layout.fragment_productfragment, container, false);
         final FragmentActivity c = getActivity();
-        final productadapter adapter;
         final RecyclerView userList=view.findViewById(R.id.productlist);
         userList.setLayoutManager(new GridLayoutManager(c, 2));
-        list =new ArrayList<productinfo>();
         String strtext = getArguments().getString("edttext");
         db = FirebaseFirestore.getInstance();
         db.collection(strtext)

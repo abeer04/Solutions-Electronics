@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,51 +56,57 @@ int i=0;
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.login) {
-            final String emailget=email.getText().toString();
-            final String getpass=password.getText().toString();
-            i=0;
-            db.collection("User")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    // Log.d("123", document.getId() + " => " + document.getData());
+        if(!TextUtils.isEmpty(email.getText())||!TextUtils.isEmpty(password.getText()) ) {
+            if (view.getId() == R.id.login) {
+                final String emailget = email.getText().toString();
+                final String getpass = password.getText().toString();
+                i = 0;
+                db.collection("User")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        // Log.d("123", document.getId() + " => " + document.getData());
 
-                                    String id=document.getId();
-                                    String pass=document.getString("password");
-                                    if (id.equals(emailget) && pass.equals(getpass)){
-                                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                                        startActivity(intent);
-                                        break;
+                                        String id = document.getId();
+                                        String pass = document.getString("password");
+                                        if (id.equals(emailget) && pass.equals(getpass)) {
+                                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                                            startActivity(intent);
+                                            break;
+                                        } else {
+                                            i++;
+
+
+                                        }
+
                                     }
-                                    else{
-                                        i++;
-
+                                    if (i > 0) {
+                                        Toast.makeText(getActivity(), "InValid Username or Password",
+                                                Toast.LENGTH_LONG).show();
 
                                     }
 
+                                    session = new Session(getActivity()); //in oncreate
+                                    //and now we set sharedpreference then use this like
+
+                                    session.setemail(email.getText().toString());
+                                } else {
+                                    Log.d("789", "Error getting documents: ", task.getException());
                                 }
-                                if(i>0){
-                                    Toast.makeText(getActivity(), "InValid Username or Password",
-                                            Toast.LENGTH_LONG).show();
-
-                                }
-
-                                session = new Session(getActivity()); //in oncreate
-                                //and now we set sharedpreference then use this like
-
-                                session.setemail(email.getText().toString());
-                            } else {
-                                Log.d("789", "Error getting documents: ", task.getException());
                             }
-                        }
-                    });
+                        });
 
 
+            }
 
+        }
+        else
+        {
+            Toast.makeText(getActivity(), "All fields are required.",
+                    Toast.LENGTH_LONG).show();
         }
 
     }

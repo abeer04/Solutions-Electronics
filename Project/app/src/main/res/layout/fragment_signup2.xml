@@ -51,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter Email"
+                android:singleLine="true"
                 app:met_floatingLabel="highlight"
                 app:met_iconLeft="@android:drawable/sym_action_email"
                 app:met_baseColor="@color/colorAccent"
@@ -63,6 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter Password"
+                android:singleLine="true"
                 app:met_iconLeft="@drawable/password"
                 app:met_floatingLabel="highlight"
                 android:inputType="textPassword"
@@ -76,6 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Reenter Password"
+                android:singleLine="true"
                 app:met_iconLeft="@drawable/password"
                 app:met_floatingLabel="highlight"
                 app:met_baseColor="@color/colorAccent"
@@ -83,13 +86,39 @@
                 app:met_errorColor="@color/darkWhite"
                 app:met_primaryColor="@color/colorAccent"
                 android:inputType="textPassword"/>
+<LinearLayout
+    android:layout_width="match_parent"
 
-            <Button
-                    android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/map_address"
-                style="@style/AppTheme.RoundedCornerMaterialButton"
-                android:text="Add Address"/>
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="100">
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/signup_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Address"
+        android:singleLine="true"
+        app:met_floatingLabel="highlight"
+        android:layout_weight="95"
+        app:met_iconLeft="@drawable/address_left"
+        app:met_baseColor="@color/colorAccent"
+        app:met_errorColor="@color/darkWhite"
+        app:met_primaryColor="@color/colorAccent"
+        app:met_clearButton="true"/>
+
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_address"
+        android:layout_margin="5dp"
+        android:src="@drawable/address"
+        android:layout_weight="5"
+        android:layout_gravity="center_vertical"
+        style="@style/AppTheme.RoundedCornerMaterialButton"
+        />
+</LinearLayout>
 
 
 

@@ -103,6 +103,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:inputType="number"
+                    android:digits="123456789"
                     android:text="1"/>
 
                 <Button

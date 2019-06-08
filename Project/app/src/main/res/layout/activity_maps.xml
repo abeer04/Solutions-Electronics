@@ -30,7 +30,7 @@
             android:layout_height="match_parent"
             android:textColor="#333333"
             android:id="@+id/show_address"
-            android:text="You are not a paid user."
+            android:text=""
             android:gravity="center_horizontal"
             android:textSize="20sp"
 

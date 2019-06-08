@@ -134,6 +134,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             return true;
         }
+        else if(id == R.id.view_profile)
+        {
+            Intent intent = new Intent(MainActivity.this, profile.class);
+            startActivity(intent);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
