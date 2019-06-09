@@ -168,6 +168,7 @@ int titems;
                                             if (document.getId().equals(doc)) {
                                                 Log.d("741", String.valueOf(gp));
                                                 // String walletn=document.getString("wallet");
+
                                                 int wl = parseInt((document.getData()).get("wallet").toString());
                                                 if (wl > tamout) {
                                                     db.collection("User").document(doc).collection("MyCart")

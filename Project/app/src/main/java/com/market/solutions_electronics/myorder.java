@@ -89,7 +89,7 @@ public class myorder extends AppCompatActivity implements OnCompleteListener<Que
             order.address=document.getString("Address");
             order.customer_name=document.getString("CustomerName");
             order.totalamount=document.getString("Total");
-//            order.orderno=document.getString("Orderno");
+            order.orderno=document.get("Orderno").toString();
             order.payment_type=document.getString("payment");
             if(order.status.equals("InProgress"))
             {porders.add(order);}

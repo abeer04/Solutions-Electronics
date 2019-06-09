@@ -10,6 +10,9 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.math.BigDecimal;
+
 import javax.annotation.Nullable;
 public class Order_notification extends JobService {
 
@@ -52,10 +55,16 @@ public class Order_notification extends JobService {
                             }
 
                             if ((queryDocumentSnapshots != null)) {
+                                try{
                                 DocumentSnapshot document=((queryDocumentSnapshots.getDocuments()).get(0));
 
-                                Toast.makeText(Order_notification.this,Double.parseDouble(document.get("Orderno").toString())+"is Delivered" ,
-                                        Toast.LENGTH_LONG).show();
+                                Toast.makeText(Order_notification.this,(new BigDecimal(document.get("Orderno").toString()).toBigInteger())+" "+"is Delivered" ,
+                                        Toast.LENGTH_LONG).show();}
+
+                                catch (Exception ee)
+                                {
+
+                                }
                             }
                         }
                     });

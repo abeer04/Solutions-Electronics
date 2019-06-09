@@ -81,20 +81,27 @@ public class signup2 extends Fragment implements View.OnClickListener, OnComplet
         register=view.findViewById(R.id.register);
         register.setOnClickListener(this);
         formlayout=view.findViewById(R.id.form);
+        try{
         String str=getArguments().getString("edit");
+            if(str.equals("1"))
+            {
+                edit="1";
+                session =new Session(getActivity());
+                register.setText("Update Profile");
+                progressBar.setVisibility(View.VISIBLE);
 
-        if(str.equals("1"))
+                db.collection("User").document(session.getemail())
+                        .get()
+                        .addOnCompleteListener(this);
+
+            }
+        }
+        catch (Exception e)
         {
-            edit="1";
-            session =new Session(getActivity());
-            register.setText("Update Profile");
-            progressBar.setVisibility(View.VISIBLE);
-
-            db.collection("User").document(session.getemail())
-                    .get()
-                    .addOnCompleteListener(this);
 
         }
+
+
 
 
         return view;
@@ -145,6 +152,7 @@ public class signup2 extends Fragment implements View.OnClickListener, OnComplet
                                             userdata.put("password", getpass);
                                             userdata.put("email", gete);
                                             userdata.put("address", getaddress);
+                                            userdata.put("wallet","0");
 
 
                                             db.collection("User").document(gete)
