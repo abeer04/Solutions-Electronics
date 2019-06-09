@@ -154,6 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter Name"
+                android:singleLine="true"
                 app:met_primaryColor="@color/colorPrimaryDark"
                 app:met_iconLeft="@drawable/profile"
                 app:met_floatingLabel="highlight" />
@@ -170,16 +171,35 @@
                 app:met_primaryColor="@color/colorPrimaryDark"
                 android:inputType="number" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/orderaddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Complete address"
+                android:layout_weight="95"
                 android:minLines="3"
+                android:singleLine="true"
                 app:met_iconLeft="@drawable/home"
                 app:met_floatingLabel="highlight"
                 app:met_primaryColor="@color/colorPrimaryDark"/>
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/map_address_checkout"
+                android:layout_margin="5dp"
+                android:src="@drawable/address"
+                android:layout_weight="5"
+                android:layout_gravity="center_vertical"
+                style="@style/AppTheme.RoundedCornerMaterialButton"
+                />
+        </LinearLayout>
 
 
             <ImageView
@@ -195,6 +215,7 @@
                 android:background="@color/colorPrimary"
                 android:padding="17dp"
                 />
+
 
         </LinearLayout>
 

@@ -17,6 +17,21 @@
                 android:id="@+id/hdmi"
                 android:icon="@drawable/hdmi"
                 android:title="Hdmi" />
+
+            <item
+                android:id="@+id/speaker"
+                android:icon="@drawable/speakers"
+                android:title="Speakers" />
+
+            <item
+                android:id="@+id/headset"
+                android:icon="@drawable/headphones"
+                android:title="Headphones" />
+
+            <item
+                android:id="@+id/camera"
+                android:icon="@drawable/camera"
+                android:title="Cameras" />
         </menu>
     </item>
 

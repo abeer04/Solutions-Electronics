@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -16,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -29,11 +33,13 @@ import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 
-public class checkout extends AppCompatActivity implements View.OnClickListener {
+public class checkout extends AppCompatActivity implements View.OnClickListener, OnCompleteListener<DocumentSnapshot> {
 TextView noitems,totalamount,date;
 RadioButton cash,wallet;
 EditText ordername,ordernumber,orderadd;
 ImageView ordernow;
+ImageButton map_address;
+
 FirebaseFirestore db;
 int tamout;
 int titems;
@@ -55,13 +61,18 @@ int titems;
         ordername=findViewById(R.id.ordername);
         ordernumber=findViewById(R.id.ordernumber);
         orderadd=findViewById(R.id.orderaddress);
-
+        map_address = findViewById(R.id.map_address_checkout);
+        map_address.setOnClickListener(this);
         ordernow=findViewById(R.id.ordernow);
         ordernow.setOnClickListener(this);
         session = new Session(checkout.this);
         String doc =session.getemail();
         Intent intent = getIntent();
         key = intent.getStringExtra("key");
+
+        db.collection("User").document(doc)
+                .get(Source.SERVER)
+                .addOnCompleteListener(this);
         if(key.equals("multi")){
 
             db.collection("User").document(doc).collection("MyCart")
@@ -128,12 +139,16 @@ int titems;
 
     @Override
     public void onClick(View view) {
+
+
         session = new Session(checkout.this);
-        final String doc =session.getemail();
-        if(view == ordernow) {
+        final String doc = session.getemail();
+
+        if (view == ordernow) {
+            if(!TextUtils.isEmpty(orderadd.getText())||!TextUtils.isEmpty(ordernumber.getText())||!TextUtils.isEmpty(ordername.getText())){
             final Date currentTime = Calendar.getInstance().getTime();
-            if(key.equals("multi")) {
-                if(wallet.isChecked()){
+            if (key.equals("multi")) {
+                if (wallet.isChecked()) {
                     db.collection("User")
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -145,11 +160,11 @@ int titems;
                                             //productinfo data1=document.getData();
 
 
-                                            if(document.getId().equals(doc)){
-                                                Log.d("741",String.valueOf(gp));
+                                            if (document.getId().equals(doc)) {
+                                                Log.d("741", String.valueOf(gp));
                                                 // String walletn=document.getString("wallet");
-                                                int wl=parseInt((document.getData()).get("wallet").toString());
-                                                if(wl>tamout){
+                                                int wl = parseInt((document.getData()).get("wallet").toString());
+                                                if (wl > tamout) {
                                                     db.collection("User").document(doc).collection("MyCart")
                                                             .get()
                                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -186,8 +201,6 @@ int titems;
                                                                                     });
 
 
-
-
                                                                         }
 
                                                                         Map<String, Object> userinfo = new HashMap<>();
@@ -219,7 +232,7 @@ int titems;
                                                                 }
                                                             });
 
-                                                    int cc=wl-tamout;
+                                                    int cc = wl - tamout;
 
 
                                                     Map<String, Object> user_wallet = new HashMap<>();
@@ -248,7 +261,7 @@ int titems;
                                                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                                                             Log.d("999", document.getId() + " => " + document.getData());
                                                                             //productinfo data1=document.getData();
-                                                                            String docid=document.getId();
+                                                                            String docid = document.getId();
 
                                                                             db.collection("User").document(doc).collection("MyCart").document(docid)
                                                                                     .delete()
@@ -270,7 +283,6 @@ int titems;
                                                                             //list.add(document.getData());
 
 
-
                                                                         }
 
                                                                     } else {
@@ -281,10 +293,7 @@ int titems;
                                                     destroy();
 
 
-
-
-                                                }
-                                                else{
+                                                } else {
                                                     Toast.makeText(checkout.this, "Not Enough money in wallet",
                                                             Toast.LENGTH_LONG).show();
                                                 }
@@ -296,7 +305,6 @@ int titems;
                                             //list.add(document.getData());
 
 
-
                                         }
 
                                     } else {
@@ -305,8 +313,7 @@ int titems;
                                 }
                             });
 
-            }
-                else{
+                } else {
 
                     db.collection("User").document(doc).collection("MyCart")
                             .get()
@@ -388,7 +395,7 @@ int titems;
                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                             Log.d("999", document.getId() + " => " + document.getData());
                                             //productinfo data1=document.getData();
-                                            String docid=document.getId();
+                                            String docid = document.getId();
 
                                             db.collection("User").document(doc).collection("MyCart").document(docid)
                                                     .delete()
@@ -421,9 +428,8 @@ int titems;
 
 
                 }
-            }
-            else{
-                if(wallet.isChecked()){
+            } else {
+                if (wallet.isChecked()) {
                     db.collection("User")
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -435,10 +441,10 @@ int titems;
                                             //productinfo data1=document.getData();
 
 
-                                            if(document.getId().equals(doc)){
-                                               // String walletn=document.getString("wallet");
-                                                int wl=parseInt((document.getData()).get("wallet").toString());
-                                                if(wl>gp){
+                                            if (document.getId().equals(doc)) {
+                                                // String walletn=document.getString("wallet");
+                                                int wl = parseInt((document.getData()).get("wallet").toString());
+                                                if (wl > gp) {
                                                     Map<String, Object> userdata = new HashMap<>();
                                                     userdata.put("Name", name);
                                                     userdata.put("Price", price);
@@ -482,7 +488,7 @@ int titems;
                                                     Toast.makeText(checkout.this, "Order has been placed",
                                                             Toast.LENGTH_LONG).show();
 
-                                                    int cc=wl-gp;
+                                                    int cc = wl - gp;
 
 
                                                     Map<String, Object> user_wallet = new HashMap<>();
@@ -498,17 +504,14 @@ int titems;
                                                             .addOnFailureListener(new OnFailureListener() {
                                                                 @Override
                                                                 public void onFailure(@NonNull Exception e) {
-                                                                   // show_amount.setText("error");
+                                                                    // show_amount.setText("error");
                                                                 }
                                                             });
 
                                                     destroy();
 
 
-
-
-                                                }
-                                                else{
+                                                } else {
                                                     Toast.makeText(checkout.this, "Not Enough money in wallet",
                                                             Toast.LENGTH_LONG).show();
                                                 }
@@ -520,7 +523,6 @@ int titems;
                                             //list.add(document.getData());
 
 
-
                                         }
 
                                     } else {
@@ -530,9 +532,7 @@ int titems;
                             });
 
 
-
-                }
-                else{
+                } else {
 
                     Map<String, Object> userdata = new HashMap<>();
                     userdata.put("Name", name);
@@ -582,12 +582,38 @@ int titems;
                 }
 
 
-
-
-
             }
 
 
+        }else {
+                Toast.makeText(this, "All fields are required.",
+                        Toast.LENGTH_LONG).show();
+            }
+    }
+        else if(view.getId()==R.id.map_address_checkout)
+        {
+            Intent intent = new Intent(this, maps.class);
+            startActivityForResult(intent, 006);
+        }
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode,int resultCode,Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if( requestCode == 006 ) {
+            if( resultCode == RESULT_OK) {
+                if( data != null ) {
+                    String map_address = data.getStringExtra("address");
+                    if(!map_address.equals("-1"))
+                    {
+                        orderadd.setText(map_address);
+                    }
+
+                }
+            }
         }
 
     }
@@ -606,5 +632,29 @@ int titems;
         intent.putExtra("done_order","0");
         setResult(RESULT_OK, intent);
         super.onBackPressed();
+    }
+
+    @Override
+    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+        if (task.isSuccessful()) {
+            DocumentSnapshot document = task.getResult();
+            if (document.exists()) {
+                try{
+
+                    orderadd.setText (document.getData().get("address").toString());
+
+                }
+                catch (Exception e)
+                {
+                    orderadd.setText("");
+                }
+            } else {
+
+            }
+        } else {
+            orderadd.setText("error");
+        }
+
     }
 }

@@ -161,7 +161,31 @@ public class products extends AppCompatActivity
             fragment.setArguments(bundle);
 
             // Handle the camera action
-        } else if (id == R.id.hdmi) {
+        } else if (id == R.id.speaker) {
+
+
+            Bundle bundle = new Bundle();
+            bundle.putString("edttext", "speaker");
+            fragment = new productfragment();
+            fragment.setArguments(bundle);
+        }
+        else if (id == R.id.headset) {
+
+
+            Bundle bundle = new Bundle();
+            bundle.putString("edttext", "headset");
+            fragment = new productfragment();
+            fragment.setArguments(bundle);
+        }
+        else if (id == R.id.camera) {
+
+
+            Bundle bundle = new Bundle();
+            bundle.putString("edttext", "camera");
+            fragment = new productfragment();
+            fragment.setArguments(bundle);
+        }
+        else if (id == R.id.hdmi) {
 
 
             Bundle bundle = new Bundle();

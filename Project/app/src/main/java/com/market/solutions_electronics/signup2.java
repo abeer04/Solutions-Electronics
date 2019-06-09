@@ -14,31 +14,38 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
+import static java.lang.Integer.parseInt;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class signup2 extends Fragment implements View.OnClickListener {
+public class signup2 extends Fragment implements View.OnClickListener, OnCompleteListener<DocumentSnapshot> {
 
     EditText email,password,conpassword,enter_address;
     Button register;
     ImageButton address;
     Context context;
+    Session session;
     LinearLayout formlayout;
+    String edit="0";
+    ProgressBar progressBar;
 
 
 
@@ -68,11 +75,28 @@ public class signup2 extends Fragment implements View.OnClickListener {
         conpassword=view.findViewById(R.id.confirmpassword);
         address=view.findViewById(R.id.map_address);
         enter_address=view.findViewById(R.id.signup_address);
+        progressBar=view.findViewById(R.id.progress);
 
         address.setOnClickListener(this);
         register=view.findViewById(R.id.register);
         register.setOnClickListener(this);
         formlayout=view.findViewById(R.id.form);
+        String str=getArguments().getString("edit");
+
+        if(str.equals("1"))
+        {
+            edit="1";
+            session =new Session(getActivity());
+            register.setText("Update Profile");
+            progressBar.setVisibility(View.VISIBLE);
+
+            db.collection("User").document(session.getemail())
+                    .get()
+                    .addOnCompleteListener(this);
+
+        }
+
+
         return view;
     }
 
@@ -99,6 +123,10 @@ public class signup2 extends Fragment implements View.OnClickListener {
 
                                         if (id.equals(emailget)) {
                                             i++;
+                                            if(edit.equals("1"))
+                                            {
+                                                i--;
+                                            }
 
                                         }
 
@@ -120,7 +148,7 @@ public class signup2 extends Fragment implements View.OnClickListener {
 
 
                                             db.collection("User").document(gete)
-                                                    .set(userdata)
+                                                    .set(userdata, SetOptions.merge())
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
@@ -133,6 +161,16 @@ public class signup2 extends Fragment implements View.OnClickListener {
                                                             //Log.w(TAG, "Error writing document", e);
                                                         }
                                                     });
+                                            if(edit.equals("1"))
+                                            {
+                                                Toast.makeText(getActivity(), "Profile Updated",
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                            else
+                                            {
+                                                Toast.makeText(getActivity(), "Registration completed",
+                                                        Toast.LENGTH_LONG).show();
+                                            }
                                             Intent intent = new Intent(getActivity(), MainActivity.class);
                                             startActivity(intent);
                                             getActivity().finish();
@@ -188,6 +226,31 @@ public class signup2 extends Fragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        if (task.isSuccessful()) {
+            progressBar.setVisibility(View.INVISIBLE);
+            DocumentSnapshot document = task.getResult();
+            if (document.exists()) {
+                try{
+                    email.setText(session.getemail());
+                    email.setEnabled(false);
+                    enter_address.setText((document.getData()).get("address").toString());
+                    password.setText((document.getData()).get("password").toString());
+                    conpassword.setText((document.getData()).get("password").toString());
+                }
+                catch (Exception e)
+                {
+                    email.setText(session.getemail());
+                    enter_address.setText("");
+                    password.setText("");
+                    conpassword.setText("");
+                }
+            }
+        } else {
+            enter_address.setText("error");
+        }
+    }
 }
 
 
