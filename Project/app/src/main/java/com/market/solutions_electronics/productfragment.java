@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,6 +33,7 @@ public class productfragment extends Fragment {
 
     ArrayList<productinfo> list;
     FirebaseFirestore db;
+    ProgressBar pro;
     ArrayList<String> des2 = new ArrayList<>();
     ArrayList<String> name = new ArrayList<>();
     ArrayList<String> pric = new ArrayList<>();
@@ -51,13 +53,16 @@ public class productfragment extends Fragment {
         final RecyclerView userList=view.findViewById(R.id.productlist);
         userList.setLayoutManager(new GridLayoutManager(c, 2));
         String strtext = getArguments().getString("edttext");
+        pro=view.findViewById(R.id.pro);
         db = FirebaseFirestore.getInstance();
+        pro.setVisibility(View.VISIBLE);
         db.collection(strtext)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            pro.setVisibility(View.INVISIBLE);
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("123", document.getId() + " => " + document.getData());
                                 //productinfo data1=document.getData();

@@ -137,6 +137,11 @@ int titems;
 
     }
 
+    public static double getRandomIntegerBetweenRange(double min, double max){
+        double x = (int)(Math.random()*((max-min)+1))+min;
+        return x;
+    }
+
     @Override
     public void onClick(View view) {
 
@@ -185,7 +190,7 @@ int titems;
 
                                                                             Log.d("777", doc);
 
-                                                                            db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection(currentTime.toString()).document()
+                                                                            db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection("products").document()
                                                                                     .set(userdata)
                                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                         @Override
@@ -208,6 +213,9 @@ int titems;
                                                                         userinfo.put("Mobile", ordernumber.getText().toString());
                                                                         userinfo.put("Address", orderadd.getText().toString());
                                                                         userinfo.put("Status", "InProgress");
+                                                                        userinfo.put("payment", "Wallet");
+                                                                        userinfo.put("Orderno", getRandomIntegerBetweenRange(10000000,99999999));
+                                                                        userinfo.put("Total", totalamount.getText().toString());
 
                                                                         db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString())
                                                                                 .set(userinfo)
@@ -335,7 +343,7 @@ int titems;
 
                                             Log.d("777", doc);
 
-                                            db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection(currentTime.toString()).document()
+                                            db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection("products").document()
                                                     .set(userdata)
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
@@ -363,6 +371,10 @@ int titems;
                                         userinfo.put("Mobile", ordernumber.getText().toString());
                                         userinfo.put("Address", orderadd.getText().toString());
                                         userinfo.put("Status", "InProgress");
+                                        userinfo.put("payment", "Cash");
+
+                                        userinfo.put("Orderno", getRandomIntegerBetweenRange(10000000,99999999));
+                                        userinfo.put("Total", totalamount.getText().toString());
 
                                         db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString())
                                                 .set(userinfo)
@@ -451,7 +463,7 @@ int titems;
                                                     userdata.put("Qty", qty);
                                                     userdata.put("URL", url2);
 
-                                                    db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection(currentTime.toString()).document()
+                                                    db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection("products").document()
                                                             .set(userdata)
                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                 @Override
@@ -540,7 +552,7 @@ int titems;
                     userdata.put("Qty", qty);
                     userdata.put("URL", url2);
 
-                    db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection(currentTime.toString()).document()
+                    db.collection("User").document(doc).collection("MyOrder").document(currentTime.toString()).collection("products").document()
                             .set(userdata)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override

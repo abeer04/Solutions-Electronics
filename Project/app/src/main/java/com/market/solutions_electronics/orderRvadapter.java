@@ -13,24 +13,24 @@ import java.util.List;
 public class orderRvadapter extends RecyclerView.Adapter<orderRvadapter.ViewHolder>{
 
 
-    List<String[]> mData = Collections.emptyList();
-    Context context;
+    List<Order> mData = Collections.emptyList();
+    Context context2;
 
 
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     // data is passed into the constructor
-    public orderRvadapter(Context Context, List<String[]> data) {
+    public orderRvadapter(Context context, List<Order> data) {
+
         this.mInflater = LayoutInflater.from(context);
-        context=Context;
+        context2=context;
         this.mData = data;
 
     }
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.order_row, parent,
-                false);
+        View view = mInflater.inflate(R.layout.order_rov, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
         return viewHolder;
@@ -38,15 +38,16 @@ public class orderRvadapter extends RecyclerView.Adapter<orderRvadapter.ViewHold
     // binds the data to the textview in each row
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        Order order = mData.get(position);
 
-        holder.id.setText("");
-        holder.time.setText("");
+        holder.id.setText(order.order_time);
+        holder.time.setText(order.order_time);
 
 
     }
     // total number of rows
     @Override
-    public int getItemCount() {
+    public int getItemCount(){
         try{
             return mData.size();}
         catch (Exception e){

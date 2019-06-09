@@ -1,5 +1,8 @@
 package com.market.solutions_electronics;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Intent;
 
 import android.os.Handler;
@@ -67,13 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
 
-        timer = new Timer(); // This will create a new Thread
-        timer.schedule(new TimerTask() { // task to be scheduled
-            @Override
-            public void run() {
-                handler.post(Update);
-            }
-        }, DELAY_MS, PERIOD_MS);
+        scheduleJob();
 
 
 
@@ -118,6 +115,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         return true;
+
+    }
+
+    public void scheduleJob() {
+        ComponentName componentName = new ComponentName(this, Order_notification.class);
+        JobInfo info = new JobInfo.Builder(123, componentName)
+                .setRequiresCharging(true)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+                .setPersisted(true)
+                .setPeriodic(15 * 60 * 1000)
+                .build();
+
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = scheduler.schedule(info);
 
     }
 

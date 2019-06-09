@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,6 +47,7 @@ public class cartfragment extends Fragment implements View.OnClickListener {
     cartrecycle adapter_forChange;
     Button checkout;
     private Session session;
+    ProgressBar progressBar;
     public cartfragment() {
         // Required empty public constructor
     }
@@ -61,6 +63,7 @@ public class cartfragment extends Fragment implements View.OnClickListener {
         checkout=view.findViewById(R.id.checkout);
         checkout.setOnClickListener(this);
         final FragmentActivity c = getActivity();
+        progressBar=view.findViewById(R.id.progres);
 
         /*
         String name22 = getArguments().getString("name2");
@@ -82,12 +85,14 @@ public class cartfragment extends Fragment implements View.OnClickListener {
         url2=productdetail.getUrl();*/
         session = new Session(getActivity());
         String doc =session.getemail();
+        progressBar.setVisibility(View.VISIBLE);
         db.collection("User").document(doc).collection("MyCart")
                 .get(Source.SERVER)
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("999", document.getId() + " => " + document.getData());
                                 //productinfo data1=document.getData();
@@ -108,6 +113,7 @@ public class cartfragment extends Fragment implements View.OnClickListener {
 
 
                             }
+                            progressBar.setVisibility(View.GONE);
 
                         } else {
                             Log.d("789", "Error getting documents: ", task.getException());
