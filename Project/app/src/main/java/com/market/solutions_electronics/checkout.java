@@ -278,8 +278,7 @@ int titems;
                                                                     }
                                                                 }
                                                             });
-                                                    Intent intent = new Intent(checkout.this, products.class);
-                                                    startActivity(intent);
+                                                    destroy();
 
 
 
@@ -409,8 +408,7 @@ int titems;
                                             //list.add(tt);
 
                                             //list.add(document.getData());
-                                            Intent intent = new Intent(checkout.this, products.class);
-                                            startActivity(intent);
+                                            destroy();
 
 
                                         }
@@ -504,8 +502,7 @@ int titems;
                                                                 }
                                                             });
 
-                                                    Intent intent = new Intent(checkout.this, products.class);
-                                                    startActivity(intent);
+                                                    destroy();
 
 
 
@@ -579,8 +576,7 @@ int titems;
                             });
                     Toast.makeText(checkout.this, "Order has been placed",
                             Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(checkout.this, products.class);
-                    startActivity(intent);
+                    destroy();
 
 
                 }
@@ -594,5 +590,21 @@ int titems;
 
         }
 
+    }
+
+    private void destroy()
+    {
+        Intent intent = new Intent();
+        intent.putExtra("done_order","1");
+        setResult(RESULT_OK, intent);
+        this.finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("done_order","0");
+        setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 }

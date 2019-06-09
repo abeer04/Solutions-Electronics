@@ -139,7 +139,7 @@ Fragment fragment;
 
 
         }
-
+        this.finish();
         return super.onOptionsItemSelected(item);
     }
 }

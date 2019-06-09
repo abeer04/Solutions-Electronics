@@ -135,6 +135,7 @@ public class signup2 extends Fragment implements View.OnClickListener {
                                                     });
                                             Intent intent = new Intent(getActivity(), MainActivity.class);
                                             startActivity(intent);
+                                            getActivity().finish();
                                         } else {
 
 

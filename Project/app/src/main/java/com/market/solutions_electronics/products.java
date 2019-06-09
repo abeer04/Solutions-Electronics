@@ -1,6 +1,7 @@
 package com.market.solutions_electronics;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -21,7 +22,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -83,7 +87,23 @@ public class products extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.products, menu);
+        ImageView profile_pic;
+        TextView mail;
+        Session session=new Session(this);
+        mail=findViewById(R.id.show_email);
+
+
+        profile_pic=findViewById(R.id.profile_pic);
         getMenuInflater().inflate(R.menu.productmenu, menu);
+        Glide
+                .with(this)   // pass Context
+                .load("https://cdn2.iconfinder.com/data/icons/circle-avatars-1/128/050_girl_avatar_profile_woman_suit_student_officer-512.png")    // pass the image url
+                .override(300, 300)
+                .centerCrop() // optional scaletype
+                .crossFade() //optional - to enable image crossfading
+                .into(profile_pic);
+        mail.setText(session.getemail());
+
         return true;
     }
 
@@ -126,6 +146,10 @@ public class products extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        SharedPreferences sp;
+        SharedPreferences.Editor se;
+        sp= getSharedPreferences("flag",MODE_PRIVATE);
+        se=sp.edit();
         // Handle navigation view item clicks here.
 
         int id = item.getItemId();
@@ -144,6 +168,17 @@ public class products extends AppCompatActivity
             bundle.putString("edttext", "Hdmi");
             fragment = new productfragment();
             fragment.setArguments(bundle);
+        }
+        else if(id==R.id.logout)
+        {
+            se.putString("login","0");
+            se.apply();
+            Intent intent = new Intent(this, bottom.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                    Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         }
         if(fragment!=null){
             FragmentManager fragmentManager = getSupportFragmentManager();

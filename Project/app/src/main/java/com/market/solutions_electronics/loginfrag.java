@@ -2,6 +2,7 @@ package com.market.solutions_electronics;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,12 +14,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -27,6 +29,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class loginfrag extends Fragment implements View.OnClickListener {
     EditText email,password;
     Button login;
+    SharedPreferences sp;
+    SharedPreferences.Editor se;
+    int f=1;
     private Session session;//global variable
 int i=0;
     FirebaseFirestore db;
@@ -43,6 +48,9 @@ int i=0;
 
         View view = inflater.inflate(R.layout.fragment_loginfrag, container, false);
         db = FirebaseFirestore.getInstance();
+        sp= this.getActivity().getSharedPreferences("flag",MODE_PRIVATE);
+        se=sp.edit();
+
         email=view.findViewById(R.id.email);
         password=view.findViewById(R.id.password);
 
@@ -73,19 +81,24 @@ int i=0;
                                         String id = document.getId();
                                         String pass = document.getString("password");
                                         if (id.equals(emailget) && pass.equals(getpass)) {
+                                            se.putString("login","1");
+                                            se.commit();
                                             Intent intent = new Intent(getActivity(), MainActivity.class);
                                             startActivity(intent);
+                                            f=0;
+
+                                            getActivity().finish();
+
                                             break;
                                         } else {
                                             i++;
-
-
                                         }
 
                                     }
-                                    if (i > 0) {
-                                        Toast.makeText(getActivity(), "InValid Username or Password",
+                                    if (f==1) {
+                                        Toast.makeText(getActivity(), "Invalid Username or Password",
                                                 Toast.LENGTH_LONG).show();
+
 
                                     }
 

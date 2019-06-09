@@ -27,6 +27,8 @@ import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +41,9 @@ public class cartfragment extends Fragment implements View.OnClickListener {
     ArrayList<String> productid = new ArrayList<>();
     productdetail productdetail=new productdetail();
 
+
     FirebaseFirestore db;
+    cartrecycle adapter_forChange;
     Button checkout;
     private Session session;
     public cartfragment() {
@@ -56,6 +60,7 @@ public class cartfragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_cartfragment, container, false);
         checkout=view.findViewById(R.id.checkout);
         checkout.setOnClickListener(this);
+        final FragmentActivity c = getActivity();
 
         /*
         String name22 = getArguments().getString("name2");
@@ -63,11 +68,12 @@ public class cartfragment extends Fragment implements View.OnClickListener {
         String price22 = getArguments().getString("price");
         String url44 = getArguments().getString("url");
         */
-        final FragmentActivity c = getActivity();
-        final cartrecycle adapter;
+
         final RecyclerView userList=view.findViewById(R.id.cartrecycle22);
         userList.setLayoutManager(new LinearLayoutManager(c));
 
+        final cartrecycle adapter= new cartrecycle(c,qty2,name,pric,url2,productid);
+        adapter_forChange=adapter;
         db = FirebaseFirestore.getInstance();
 /*
         name=productdetail.getname();
@@ -94,7 +100,7 @@ public class cartfragment extends Fragment implements View.OnClickListener {
                                 String url=document.getString("Url");
                                 url2.add(url);
                                 productid.add(document.getId());
-                                userList.setAdapter(new cartrecycle(c,qty2,name,pric,url2,productid));
+                                userList.setAdapter(adapter);
                                 //list.add(tt);
 
                                 //list.add(document.getData());
@@ -114,17 +120,35 @@ public class cartfragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-
-
-
-
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.checkout) {
             Intent intent = new Intent(getActivity(), checkout.class);
             intent.putExtra("key","multi");
-            startActivity(intent);
+            startActivityForResult(intent,005);
 
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if( requestCode == 005 ) {
+            if( resultCode == RESULT_OK) {
+                if( data != null ) {
+                    String last = data.getStringExtra("done_order");
+                    if(last.equals("1"))
+                    {
+                        getActivity().onBackPressed();
+                    }
+
+
+
+                }
+            }
+        }
+
+
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
+
+
 
     <item android:title="Categories">
         <menu>
             <item
+                app:itemIconTint="@android:color/black"
                 android:id="@+id/smartwatch"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/smartwatch"
                 android:title="Smart-Watch" />
             <item
                 android:id="@+id/hdmi"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/hdmi"
                 android:title="Hdmi" />
         </menu>
+    </item>
+
+    <item
+
+        android:icon="@drawable/logout"
+        android:id="@+id/logout"
+        android:title="Logout">
+
+
     </item>
 
 </menu>
